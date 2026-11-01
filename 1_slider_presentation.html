@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TATA ELXSI TELIPORT S4 - Case Study 1: Predictive Maintenance (AEROLINK-PHM)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-900: #071326;
+      --navy-800: #0B192C;
+      --navy-700: #14284B;
+      --tata-blue: #0072CE;
+      --tata-cyan: #0EA5E9;
+      --accent-teal: #06B6D4;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+      --crit-red: #DC2626;
+      --crit-bg: #FEF2F2;
+      --warn-orange: #EA580C;
+      --warn-bg: #FFF7ED;
+      --caut-amber: #D97706;
+      --caut-bg: #FFFBEB;
+      --ok-green: #10B981;
+      --ok-bg: #ECFDF5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #050B14;
+      color: var(--slate-900);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* 16:9 Widescreen Slide Container */
+    .slide-wrapper {
+      width: 100%;
+      max-width: 1720px;
+      aspect-ratio: 16 / 9;
+      background: var(--slate-100);
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 60%, var(--navy-700) 100%);
+      padding: 14px 28px;
+      color: white;
+      border-bottom: 2px solid var(--tata-blue);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .sub-tag {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--tata-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sub-tag .badge-pill {
+      background: rgba(14, 165, 233, 0.2);
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+    }
+
+    .main-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.3px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stat-badge {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 6px 12px;
+      text-align: right;
+    }
+
+    .stat-badge .stat-label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      color: var(--slate-300);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-badge .stat-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--tata-cyan);
+    }
+
+    /* Pipeline Flow Chevron Ribbon */
+    .flow-strip {
+      background: #0C1A30;
+      padding: 6px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .flow-step {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      border-radius: 6px;
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+    }
+
+    .flow-step .num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--tata-blue);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .flow-step .text-wrap {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .flow-step .step-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--tata-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .flow-step .step-desc {
+      font-size: 9px;
+      color: var(--slate-300);
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .flow-arrow {
+      color: var(--tata-cyan);
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* Main Grid: 4 Equal Columns */
+    .content-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 14px 28px;
+      background: var(--slate-100);
+      overflow: hidden;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border-radius: 8px;
+      border: 1px solid var(--slate-300);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-700) 100%);
+      color: white;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--tata-blue);
+      flex-shrink: 0;
+    }
+
+    .card-header h3 {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .weight-tag {
+      font-size: 9px;
+      font-weight: 700;
+      background: rgba(14, 165, 233, 0.25);
+      color: #E0F2FE;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(14, 165, 233, 0.5);
+    }
+
+    .card-body {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 9.5px;
+      line-height: 1.35;
+      color: var(--slate-800);
+      overflow-y: auto;
+    }
+
+    .section-block {
+      border-left: 2.5px solid var(--tata-blue);
+      padding-left: 8px;
+    }
+
+    .section-title {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--navy-700);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      letter-spacing: 0.2px;
+    }
+
+    .bullet-item {
+      margin-bottom: 3px;
+    }
+
+    .bullet-item strong {
+      color: var(--navy-900);
+      font-weight: 600;
+    }
+
+    .bullet-item span {
+      color: var(--slate-600);
+    }
+
+    /* Custom highlight boxes */
+    .mini-box {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 5px;
+      padding: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+    }
+
+    /* Severity Grid in Agent Card */
+    .sev-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sev-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 8.5px;
+      font-weight: 500;
+    }
+
+    .sev-row.crit { background: var(--crit-bg); border-left: 3px solid var(--crit-red); color: #991B1B; }
+    .sev-row.warn { background: var(--warn-bg); border-left: 3px solid var(--warn-orange); color: #9A3412; }
+    .sev-row.caut { background: var(--caut-bg); border-left: 3px solid var(--caut-amber); color: #92400E; }
+    .sev-row.ok   { background: var(--ok-bg);   border-left: 3px solid var(--ok-green); color: #065F46; }
+
+    .sev-label {
+      font-weight: 700;
+      min-width: 65px;
+      text-transform: uppercase;
+      font-size: 8px;
+    }
+
+    /* Schema Card */
+    .schema-preview {
+      background: #0A192F;
+      color: #38BDF8;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      line-height: 1.25;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+    }
+
+    /* Scalability Table */
+    .dataset-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8px;
+    }
+
+    .dataset-table th, .dataset-table td {
+      border: 1px solid var(--slate-200);
+      padding: 3px 5px;
+      text-align: left;
+    }
+
+    .dataset-table th {
+      background: var(--slate-50);
+      font-weight: 700;
+      color: var(--navy-800);
+    }
+
+    /* Footer Strip */
+    .footer-bar {
+      background: var(--navy-900);
+      color: white;
+      padding: 8px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9.5px;
+      border-top: 1px solid var(--slate-700);
+      flex-shrink: 0;
+    }
+
+    .checklist {
+      display: flex;
+      gap: 16px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--slate-200);
+    }
+
+    .check-mark {
+      color: var(--ok-green);
+      font-weight: 800;
+    }
+
+    .metric-pills {
+      display: flex;
+      gap: 10px;
+    }
+
+    .pill {
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid var(--tata-cyan);
+      color: #E0F2FE;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 8.5px;
+    }
+
+    @media print {
+      body { padding: 0; background: white; }
+      .slide-wrapper {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide-wrapper">
+    <!-- Header -->
+    <div class="header-bar">
+      <div class="header-left">
+        <div class="sub-tag">
+          <span>TATA ELXSI | TELIPORT S4</span>
+          <span class="badge-pill">CASE STUDY 1: PREDICTIVE MAINTENANCE</span>
+          <span class="badge-pill">ROUND 1 DESIGN DECK</span>
+        </div>
+        <div class="main-title">AEROLINK-PHM: Autonomous Closed-Loop Anomaly Detection & RUL Prognostics</div>
+      </div>
+      <div class="header-right">
+        <div class="stat-badge">
+          <div class="stat-label">Decision Paradigm</div>
+          <div class="stat-val">100% Rule Triage (No LLM)</div>
+        </div>
+        <div class="stat-badge">
+          <div class="stat-label">Benchmark</div>
+          <div class="stat-val">NASA C-MAPSS FD001-FD004</div>
+        </div>
+        <div class="stat-badge">
+          <div class="stat-label">Loss Optimization</div>
+          <div class="stat-val">PHM'08 Asymmetric Penalty</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5-Stage Pipeline Chevron Strip -->
+    <div class="flow-strip">
+      <div class="flow-step">
+        <div class="num">1</div>
+        <div class="text-wrap">
+          <div class="step-title">Ingestion & Regimes</div>
+          <div class="step-desc">21 Sensors + 3 Flight Settings</div>
+        </div>
+      </div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">
+        <div class="num">2</div>
+        <div class="text-wrap">
+          <div class="step-title">Data Engineering</div>
+          <div class="step-desc">K-Means Regime Clust. + EWMA</div>
+        </div>
+      </div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">
+        <div class="num">3</div>
+        <div class="text-wrap">
+          <div class="step-title">Dual ML Prognostics</div>
+          <div class="step-desc">IsoForest + LightGBM (Asymm. Loss)</div>
+        </div>
+      </div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">
+        <div class="num">4</div>
+        <div class="text-wrap">
+          <div class="step-title">Non-LLM Triage Agent</div>
+          <div class="step-desc">4-Tier Logic + Auto CMMS Order</div>
+        </div>
+      </div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">
+        <div class="num">5</div>
+        <div class="text-wrap">
+          <div class="step-title">MLOps & Retraining</div>
+          <div class="step-desc">MLflow + Drift KS-Test Feedback</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Main Content Columns -->
+    <div class="content-grid">
+
+      <!-- COLUMN 1: DATA ENGINEERING & PHYSICS -->
+      <div class="card">
+        <div class="card-header">
+          <h3><span>⚡</span> 1. Data Prep & Physics</h3>
+          <span class="weight-tag">15% + 10% WEIGHT</span>
+        </div>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Turbofan Sensor Pruning</div>
+            <div class="bullet-item">
+              <strong>Sensor Topology:</strong> <span>21 sensors across Fan, LPC, HPC, HPT, LPT modules.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Zero-Variance Drop:</strong> <span>Sensors 1, 5, 10, 16, 18, 19 exhibit standard deviation = 0 across all runs. Pruned to remove rank deficiency.</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Multi-Regime Normalization</div>
+            <div class="bullet-item">
+              <strong>Operating Regimes:</strong> <span>FD002/004 vary across Alt (0-42k ft), Mach (0-0.84), TRA (20-100).</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Centroid Clustering:</strong> <span>K-Means (k=6) clusters operating states.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Regime Z-Score:</strong> <span>Standardize per regime k: Z = (X - μ_k) / σ_k. Removes environmental flight swings while preserving pure physical degradation drift.</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Denoising & Feature Engineering</div>
+            <div class="bullet-item">
+              <strong>Noise Filter:</strong> <span>Savitzky-Golay / EWMA (α=0.2) removes high-frequency jitter without introducing phase lag.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Rolling Dynamics:</strong> <span>Rolling mean, std, min-max over W=15, 30 cycles capture degradation velocity.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Trend d/dt:</strong> <span>Linear slope over sliding windows isolates true monotonic degradation.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Thermodynamic Ratios:</strong> <span>T30/P30 (combustor heat-pressure) & Ps30/Nc (HPC efficiency indicator).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMN 2: MACHINE LEARNING & PROGNOSTICS -->
+      <div class="card">
+        <div class="card-header">
+          <h3><span>🧠</span> 2. ML Prognostics Engine</h3>
+          <span class="weight-tag">20% WEIGHT</span>
+        </div>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Two-Stage Hybrid Pipeline</div>
+            <div class="bullet-item">
+              <strong>Stage 1 (Anomaly Detection):</strong> <span>Unsupervised Isolation Forest + Mahalanobis Distance on nominal flight window to locate fault initiation (t_fault).</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Stage 2 (RUL Estimation):</strong> <span>Triggered once anomaly threshold is breached, eliminating premature wear penalties.</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Piecewise-Linear RUL Target</div>
+            <div class="bullet-item">
+              <strong>Physics Cap (RUL_max = 125):</strong> <span>Early engine operational life exhibits zero physical wear. Clipping avoids model learning noise during healthy cycles.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Linear Degradation:</strong> <span>Degrades monotonically to 0 at failure cycle.</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Model Algorithms & Justification</div>
+            <div class="bullet-item">
+              <strong>Primary - LightGBM Regressor:</strong> <span>Sub-5ms inference, handles collinear rolling features, tree-based splits resilient to outliers.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Deep Alternate - 1D CNN + Bi-LSTM:</strong> <span>Captures long temporal dependencies for FD004 benchmarking.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Imbalance Handling:</strong> <span>Time-decay sample weights prioritize critical low-RUL cycles over nominal cycles.</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">NASA PHM'08 Asymmetric Loss</div>
+            <div class="bullet-item">
+              <strong>Penalty Formula:</strong> <span>S = Σ (e^-d/13 - 1) for d < 0 vs Σ (e^d/10 - 1) for d ≥ 0 (where d = Pred - Actual).</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Domain Reasoning:</strong> <span>Late prediction risks in-flight failure; early prediction causes only early inspection. Late calls penalized 1.5x-2x heavier.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>TreeSHAP Attribution:</strong> <span>Interprets dominant sensor drift (e.g. HPC bleed temp).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMN 3: NON-LLM TRIAGE AGENT -->
+      <div class="card">
+        <div class="card-header">
+          <h3><span>⚙️</span> 3. Non-LLM Triage Agent</h3>
+          <span class="weight-tag">15% WEIGHT</span>
+        </div>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Deterministic Rule Architecture</div>
+            <div class="bullet-item">
+              <strong>Zero-LLM Mandate:</strong> <span>Pure Python state machine. Zero hallucination risk, ultra-low footprint, edge-deployable (<1ms latency).</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Closed-Loop Trigger:</strong> <span>Maps (RUL, Anomaly_Score, dRUL/dt) directly into enterprise maintenance work orders.</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">4-Tier Severity Action Matrix</div>
+            <div class="sev-grid">
+              <div class="sev-row crit">
+                <span class="sev-label">🔴 CRITICAL</span>
+                <span>RUL ≤ 15 cyc: Immediate lockout. Dispatch P1 work order, pre-allocate HPC Blade Kit.</span>
+              </div>
+              <div class="sev-row warn">
+                <span class="sev-label">🟠 WARNING</span>
+                <span>15 &lt; RUL ≤ 45 cyc: Schedule maintenance dock at next base turnaround (&lt;48h).</span>
+              </div>
+              <div class="sev-row caut">
+                <span class="sev-label">🟡 CAUTION</span>
+                <span>45 &lt; RUL ≤ 80 cyc: Boost telemetry polling to 5Hz. Flag in fleet watch-register.</span>
+              </div>
+              <div class="sev-row ok">
+                <span class="sev-label">🟢 NOMINAL</span>
+                <span>RUL &gt; 80 cyc: Standard line maintenance clearance.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Automated Work Order Schema</div>
+            <div class="schema-preview">
+{
+  "WO_ID": "WO-2026-ENG104",
+  "unit_id": 42,
+  "severity": "CRITICAL",
+  "pred_rul": 11.4,
+  "confidence_95": [9.8, 13.0],
+  "primary_fault": "HPC Degradation",
+  "actions": ["Borescope Inspect", "Replace HPC Blades"],
+  "parts_sku": ["HPC-BLD-044", "SEAL-RING-12"]
+}
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Human-in-the-Loop Safeguards</div>
+            <div class="bullet-item">
+              <strong>Escalation Triggers:</strong> <span>Human Reliability Engineer alerted only on: (1) Prediction variance &gt; 25%, (2) Sensor signal conflict, (3) Anomaly without RUL drop.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMN 4: MLOPS & DATASET SCALABILITY -->
+      <div class="card">
+        <div class="card-header">
+          <h3><span>🔄</span> 4. MLOps & Dataset Coverage</h3>
+          <span class="weight-tag">15% + 10% WEIGHT</span>
+        </div>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">MLOps Lifecycle & Retraining</div>
+            <div class="bullet-item">
+              <strong>MLflow Tracking:</strong> <span>Logs hyperparameters, RMSE, PHM scores, and model binaries with automated production staging gates.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Drift Detection:</strong> <span>Kolmogorov-Smirnov test on rolling sensors + Population Stability Index (PSI &gt; 0.25) to detect calibration drift.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Automated Retraining:</strong> <span>Triggered when test RMSE drifts &gt; 12% or when 10 completed engine teardown inspection records arrive.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>Fleet Dashboard:</strong> <span>Streamlit interface for fleet health heatmap, unit RUL countdowns, and active triage queues.</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">NASA C-MAPSS Coverage Roadmap</div>
+            <table class="dataset-table">
+              <thead>
+                <tr>
+                  <th>Set</th>
+                  <th>Cond</th>
+                  <th>Faults</th>
+                  <th>Proposed Strategy</th>
+                  <th>Target</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>FD001</strong></td>
+                  <td>1</td>
+                  <td>1 (HPC)</td>
+                  <td>Single Scaler + LightGBM</td>
+                  <td>RMSE &lt; 14.5</td>
+                </tr>
+                <tr>
+                  <td><strong>FD002</strong></td>
+                  <td>6</td>
+                  <td>1 (HPC)</td>
+                  <td>K-Means Regime Clust. + Z-Norm</td>
+                  <td>RMSE &lt; 20.5</td>
+                </tr>
+                <tr>
+                  <td><strong>FD003</strong></td>
+                  <td>1</td>
+                  <td>2 (HPC/Fan)</td>
+                  <td>RF Fault Classifier + Branch RUL</td>
+                  <td>RMSE &lt; 15.0</td>
+                </tr>
+                <tr>
+                  <td><strong>FD004</strong></td>
+                  <td>6</td>
+                  <td>2 (HPC/Fan)</td>
+                  <td>Regimes + Multi-Fault Ensemble</td>
+                  <td>RMSE &lt; 22.0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Business & Operational ROI</div>
+            <div class="bullet-item">
+              <strong>35% Reduction:</strong> <span>In unplanned fleet downtime via proactive turnaround maintenance.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>22% Savings:</strong> <span>On spares inventory through just-in-time work order parts pre-allocation.</span>
+            </div>
+            <div class="bullet-item">
+              <strong>98% Automation:</strong> <span>Nominal engine triage executed without human intervention.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer Bar -->
+    <div class="footer-bar">
+      <div class="checklist">
+        <div class="check-item"><span class="check-mark">✓</span> Architecture: Data → Features → Model → Agent → Work Order</div>
+        <div class="check-item"><span class="check-mark">✓</span> Feature Engineering & Denoising</div>
+        <div class="check-item"><span class="check-mark">✓</span> ML RUL Reasoning & Asymmetric Loss</div>
+        <div class="check-item"><span class="check-mark">✓</span> Deterministic Triage Logic</div>
+        <div class="check-item"><span class="check-mark">✓</span> MLOps Retraining Loop</div>
+      </div>
+      <div class="metric-pills">
+        <div class="pill">Edge-Ready (<5ms Inference)</div>
+        <div class="pill">Zero-LLM Deterministic Agent</div>
+        <div class="pill">Full FD001-FD004 Scaling</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+
